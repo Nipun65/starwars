@@ -2,14 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { fetchChars } from "@/app/services";
-import { IMAGES } from "@/app/utils/constants.utils";
-import { Character, CharacterResponse } from "@/app/Interfaces";
-import Card from "@/app/Components/Card";
-import Pagination from "@/app/Components/Pagination";
-import CharDetailsModal from "@/app/Components/CharDetailsModal";
-import Loader from "@/app/Components/Loader";
-import Layout from "@/app/Components/Layout";
+import { fetchChars } from "@/services";
+import { IMAGES } from "@/utils/constants.utils";
+import { Character, CharacterResponse } from "@/interfaces";
+import Card from "@/components/Card";
+import Pagination from "@/components/Pagination";
+import CharDetailsModal from "@/components/CharDetailsModal";
+import Loader from "@/components/Loader";
+import Layout from "@/components/Layout";
 
 const Characters = () => {
   const [data, setData] = useState<CharacterResponse>();

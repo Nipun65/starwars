@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { fetchHomeWorldInfo } from "../services";
-import { Character, HomeWorld } from "../Interfaces";
+import { Character, HomeWorld } from "../interfaces";
 import Chip from "./Chip";
 import Button from "./Button";
 import ContentLoader from "./ContentLoader";

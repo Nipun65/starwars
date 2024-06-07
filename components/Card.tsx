@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
-import { Character } from "../Interfaces";
+import { Character } from "../interfaces";
 
 interface CardProps {
   data: Character;
