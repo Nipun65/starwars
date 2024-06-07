@@ -16,7 +16,7 @@ const Characters = () => {
   const [data, setData] = useState<CharacterResponse>();
   const [activeModalData, setActiveModalData] = useState<Character>();
   const [showModal, setShowModal] = useState(false);
-  const [showLoader, setShowLoader] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
   const path = usePathname();
   const splitValue = path.split("/");
   const router = useRouter();
@@ -76,10 +76,12 @@ const Characters = () => {
                 );
               })}
             </div>
-          ) : (
+          ) : showLoader ? (
             <div className="flex items-center justify-center h-screen">
               <Loader />
             </div>
+          ) : (
+            <div className="text-center text-4xl">No Data Found</div>
           )}
           <Pagination
             totalCount={data?.count || 0}
