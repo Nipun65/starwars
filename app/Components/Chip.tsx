@@ -1,7 +1,13 @@
 import { twMerge } from "tailwind-merge";
 import Tooltip from "./Tooltip";
 
-const Chip = ({ children, className, tooltipContent }: any) => {
+interface ChipProps {
+  children: React.ReactNode;
+  className?: string;
+  tooltipContent: string;
+}
+
+const Chip: React.FC<ChipProps> = ({ children, className, tooltipContent }) => {
   return (
     <div className="relative group">
       <div

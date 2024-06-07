@@ -5,8 +5,7 @@ const fetchChars = async (page: number) => {
   const apiURL = `${charURL}/people?page=${page}`;
 
   try {
-    const result: any = await axios.get(apiURL);
-
+    const result = await axios.get(apiURL);
     return result;
   } catch (error) {
     return error;
@@ -15,7 +14,7 @@ const fetchChars = async (page: number) => {
 
 const fetchHomeWorldInfo = async (apiURL: string) => {
   try {
-    const result: any = await axios.get(apiURL);
+    const result = await axios.get(apiURL);
     return result;
   } catch (error) {
     console.error(error);

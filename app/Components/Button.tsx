@@ -1,18 +1,27 @@
+import { KeyboardEventHandler } from "react";
 import { twMerge } from "tailwind-merge";
 
-const Button = ({
+interface ButtonProps {
+  children: React.ReactNode;
+  className?: string;
+  onClick?: () => void;
+  onKeyUp?: KeyboardEventHandler<HTMLButtonElement>;
+  disabled?: boolean;
+}
+
+const Button: React.FC<ButtonProps> = ({
   children,
   className,
   onClick,
-  onKeyPress,
+  onKeyUp,
   disabled,
-}: any) => {
+}) => {
   return (
     <button
       className={twMerge("px-4 py-2", className)}
       disabled={disabled}
       onClick={onClick}
-      onKeyPress={onKeyPress}
+      onKeyUp={onKeyUp}
     >
       {children}
     </button>

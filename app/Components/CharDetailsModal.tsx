@@ -1,7 +1,10 @@
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { fetchHomeWorldInfo } from "../services";
+import { Character, HomeWorld } from "../Interfaces";
 import Chip from "./Chip";
+import Button from "./Button";
+import ContentLoader from "./ContentLoader";
 import height from "@/public/height.svg";
 import mass from "@/public/weight.svg";
 import gender from "@/public/gender.svg";
@@ -16,60 +19,94 @@ import terrain from "@/public/terrain.svg";
 import date from "@/public/date.svg";
 import residents from "@/public/residents.svg";
 import films from "@/public/films.svg";
-import Button from "./Button";
 
-const CharDetailsModal = ({ data, setshowModal }: any) => {
-  const convertDateFormat = (date: string) => {
-    const dateVal = new Date(date);
-    const dateStr = dateVal?.getDate();
-    const month = dateVal?.getMonth() + 1;
-    const year = dateVal?.getFullYear();
-    return `${dateStr}-${month}-${year}`;
+interface CharDetailsModalProps {
+  data: Character | undefined;
+  setShowModal: Dispatch<SetStateAction<boolean>>;
+}
+
+const CharDetailsModal: React.FC<CharDetailsModalProps> = ({
+  data,
+  setShowModal,
+}) => {
+  const convertDateFormat = (date: string | undefined) => {
+    if (date) {
+      const dateVal = new Date(date);
+      const dateStr = dateVal?.getDate();
+      const month = dateVal?.getMonth() + 1;
+      const year = dateVal?.getFullYear();
+      return `${dateStr}-${month}-${year}`;
+    }
   };
-  const [homeWorldInfo, setHomeWorldInfo] = useState<any>({});
+
+  const [homeWorldInfo, setHomeWorldInfo] = useState<HomeWorld>();
 
   const fetchHomeDetails = async () => {
-    const result = await fetchHomeWorldInfo(data?.homeworld);
-    setHomeWorldInfo(result.data);
+    if (data) {
+      const result: any = await fetchHomeWorldInfo(data?.homeworld);
+      setHomeWorldInfo(result.data);
+    }
   };
 
   useEffect(() => {
     fetchHomeDetails();
   }, [data?.homeworld]);
 
+  useEffect(() => {
+    const keyPressListener = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setShowModal(false);
+      }
+    };
+
+    document.addEventListener("keydown", keyPressListener);
+
+    return () => {
+      document.removeEventListener("keydown", keyPressListener);
+    };
+  }, []);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center no-scroll">
       <div
         className="absolute inset-0 bg-black bg-opacity-50 pointer-events-none"
-        onClick={() => setshowModal(false)}
+        onClick={() => setShowModal(false)}
       />
-      <div className="relative bg-black p-6 rounded-lg w-[60%] overflow-auto max-h-[95%]">
+      <div className="relative bg-black p-6 rounded-lg w-[60%] overflow-auto max-h-[95%] border border-white/20">
         <div className="flex items-center justify-between">
           <h3 className="xs:text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-[#ffe81f]">
             {data?.name}
           </h3>
-          <Button onClick={() => setshowModal(false)}>
+          <Button onClick={() => setShowModal(false)}>
             <Image src={close} alt="close icon" className="size-6" />
           </Button>
         </div>
         <div className="mt-4 text-white">
-          <div className="xs:flex-col lg:flex-row gap-6 flex justify-center items-center">
+          <div className="xs:flex-col lg:flex-row gap-6 flex justify-center xs:items-center lg:items-start">
             <Image
-              src={data?.image}
+              src={data?.image || ""}
               alt="star wars char"
               width={400}
               height={400}
               className="h-72 w-96"
             />
-            <div className="flex flex-col">
+            <div className="flex flex-col mt-2">
               <div className="flex flex-wrap text-sm gap-2 text-gray-500">
                 <Chip tooltipContent="height">
                   <Image src={height} alt="height icon" className="size-4" />
-                  <div>{data?.height}cm</div>
+                  <div>
+                    {data?.height === "unknown"
+                      ? "unknown"
+                      : parseInt(data?.height as string) / 100}
+                    &nbsp;
+                    {data?.height !== "unknown" && "m"}
+                  </div>
                 </Chip>
                 <Chip tooltipContent="mass">
                   <Image src={mass} alt="mass icon" className="size-4" />
-                  <div>{data?.mass}kg</div>
+                  <div>
+                    {data?.mass}&nbsp;{data?.mass !== "unknown" && "kg"}
+                  </div>
                 </Chip>
                 <Chip tooltipContent="Hair Color">
                   <Image src={haircolor} alt="height icon" className="size-4" />
@@ -100,30 +137,46 @@ const CharDetailsModal = ({ data, setshowModal }: any) => {
                   <div>{data?.films?.length || 0}</div>
                 </Chip>
               </div>
-              <div className="my-2">
+              <div className="mt-4">
                 <p className="font-semibold text-xl mb-2">
                   Home World Information:
                 </p>
                 <div className="flex flex-wrap text-sm gap-2 text-gray-500">
                   <Chip tooltipContent="Name">
                     <Image src={name} alt="eye icon" className="size-4" />
-                    <div>{homeWorldInfo?.name}</div>
+                    {homeWorldInfo?.name ? (
+                      <div>{homeWorldInfo?.name}</div>
+                    ) : (
+                      <ContentLoader />
+                    )}
                   </Chip>
                   <Chip tooltipContent="Terrain">
                     <Image src={terrain} alt="cake icon" className="size-4" />
-                    <div>{homeWorldInfo?.terrain}</div>
+                    {homeWorldInfo?.terrain ? (
+                      <div>{homeWorldInfo?.terrain}</div>
+                    ) : (
+                      <ContentLoader />
+                    )}
                   </Chip>
                   <Chip tooltipContent="Climate">
                     <Image src={climate} alt="gender icon" className="size-4" />
-                    <div>{homeWorldInfo?.climate}</div>
+                    {homeWorldInfo?.climate ? (
+                      <div>{homeWorldInfo?.climate}</div>
+                    ) : (
+                      <ContentLoader />
+                    )}
                   </Chip>
                   <Chip tooltipContent="Total Residents">
                     <Image
                       src={residents}
                       alt="residents icon"
-                      className="size-3"
+                      className="size-4"
                     />
-                    <div>{homeWorldInfo?.residents?.length}</div>
+                    {homeWorldInfo?.residents?.length ? (
+                      <div>{homeWorldInfo?.residents?.length}</div>
+                    ) : (
+                      <ContentLoader />
+                    )}
                   </Chip>
                 </div>
               </div>
