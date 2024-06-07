@@ -23,20 +23,27 @@ const Characters = () => {
 
   const fetchData = async () => {
     setShowLoader(true);
-    const value: any = await fetchChars(currentPage);
-    setData(() => {
-      return {
-        ...value?.data,
-        results: value?.data?.results?.map((char: Character, index: number) => {
-          return {
-            ...char,
-            image: IMAGES[Math.floor(Math.random() * IMAGES.length)],
-            id: index + 1,
-          };
-        }),
-      };
-    });
-    setShowLoader(false);
+    try {
+      const value: any = await fetchChars(currentPage);
+      setData(() => {
+        return {
+          ...value?.data,
+          results: value?.data?.results?.map(
+            (char: Character, index: number) => {
+              return {
+                ...char,
+                image: IMAGES[Math.floor(Math.random() * IMAGES.length)],
+                id: index + 1,
+              };
+            }
+          ),
+        };
+      });
+    } catch (error) {
+      console.error("Error fetching characters:", error);
+    } finally {
+      setShowLoader(false);
+    }
   };
 
   const [currentPage, setCurrentPage] = useState<number>(

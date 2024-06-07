@@ -10,6 +10,7 @@ const Header = () => {
         width={400}
         alt="star wars logo"
         className="size-28 py-4 mx-4"
+        priority
       />
     </div>
   );

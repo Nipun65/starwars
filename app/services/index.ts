@@ -8,7 +8,7 @@ const fetchChars = async (page: number) => {
     const result = await axios.get(apiURL);
     return result;
   } catch (error) {
-    return error;
+    throw new Error("Error fetching characters: " + error);
   }
 };
 
@@ -18,7 +18,7 @@ const fetchHomeWorldInfo = async (apiURL: string) => {
     return result;
   } catch (error) {
     console.error(error);
-    return error;
+    throw new Error("Error fetching details: " + error);
   }
 };
 
