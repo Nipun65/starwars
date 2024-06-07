@@ -9,7 +9,6 @@ import Card from "@/app/Components/Card";
 import Pagination from "@/app/Components/Pagination";
 import CharDetailsModal from "@/app/Components/CharDetailsModal";
 import Loader from "@/app/Components/Loader";
-import Header from "@/app/Components/Header";
 import Layout from "@/app/Components/Layout";
 
 const Characters = () => {
