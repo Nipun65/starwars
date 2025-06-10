@@ -22,7 +22,7 @@ interface Character {
 }
 
 interface CharacterResponse {
-  count: number;
+  total_records: number;
   next: string | null;
   previous: string | null;
   results: Character[];

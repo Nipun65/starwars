@@ -83,7 +83,7 @@ const Characters = () => {
             <div className="text-center text-4xl">No Data Found</div>
           )}
           <Pagination
-            totalCount={data?.count || 0}
+            totalCount={data?.total_records || 0}
             perPageContent={10}
             currentPage={currentPage}
             handleChange={handleChange}
